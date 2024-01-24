@@ -49,7 +49,8 @@ class StructureConfig
         private readonly string $testDir,
         private readonly string $domainNamespacePrefix,
         private readonly string $testNamespacePrefix
-    ) {}
+    ) {
+    }
 
     public function getDomainDir(): string
     {
