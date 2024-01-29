@@ -104,7 +104,7 @@ class MakerUseCase extends AbstractMaker
         if (str_contains($key, 'Namespace')) {
             $fullName = $this->details[str_replace('Namespace', '', $key)]->getFullName();
 
-            return substr_replace($fullName, '', 0, \mb_strlen($this->rootNamespace . '\\'));
+            return substr_replace($fullName, '', 0, mb_strlen($this->rootNamespace . '\\'));
         }
 
         return $this->details[$key]->getShortName();
