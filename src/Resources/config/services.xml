@@ -12,7 +12,7 @@
             <argument>%use_case_maker.namespace_prefix.test%</argument>
         </service>
 
-        <service id="Gibass\UseCaseMakerBundle\Maker\MakerUseCase" >
+        <service id="maker.maker.maker_use_case" class="Gibass\UseCaseMakerBundle\Maker\MakerUseCase" >
             <argument /> <!-- root namespace -->
             <argument type="service" id="Gibass\UseCaseMakerBundle\Structure\StructureConfig"/>
             <tag name="maker.command" />

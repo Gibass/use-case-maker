@@ -25,7 +25,7 @@ class UseCaseMakerExtension extends Extension
 
             $rootNamespace = trim($config['parameters']['root_namespace'], '\\');
 
-            $makerCommandDefinition = $container->getDefinition(MakerUseCase::class);
+            $makerCommandDefinition = $container->getDefinition('maker.maker.maker_use_case');
             $makerCommandDefinition->replaceArgument(0, $rootNamespace);
         }
     }
