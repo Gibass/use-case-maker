@@ -1,6 +1,5 @@
 {
   "name": "gibass/use-case-maker",
-  "version": "0.1.0",
   "description": "Generating classes for clean architecture Project in symfony",
   "type": "symfony-bundle",
   "minimum-stability": "stable",
