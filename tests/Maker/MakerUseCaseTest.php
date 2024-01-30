@@ -2,8 +2,10 @@
 
 namespace Gibass\UseCaseMakerBundle\Maker;
 
+use Gibass\UseCaseMakerBundle\Exception\FileAlreadyExistException;
 use Gibass\UseCaseMakerBundle\Test\MakerTestCase;
 use Gibass\UseCaseMakerBundle\Test\MakerTestContent;
+use Gibass\UseCaseMakerBundle\Test\MakerTestFailed;
 use Gibass\UseCaseMakerBundle\Test\MakerTestGenerate;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -43,6 +45,21 @@ class MakerUseCaseTest extends MakerTestCase
     public function testContentSuccessful(MakerTestContent $content): void
     {
         $this->assertFileContent($content->getDomain(), $content->getFiles());
+    }
+
+    /**
+     * @dataProvider dataTestFailedProvider
+     */
+    public function testFailedGenerate(MakerTestFailed $failed): void
+    {
+        $this->expectException($failed->getException());
+        $this->expectExceptionMessage($failed->getMessage());
+
+        $this->commandTester->execute([
+            'domain' => $failed->getDomain(),
+            'name' => $failed->getUseCase(),
+            '--presenter' => $failed->isHavePresenter(),
+        ]);
     }
 
     public static function dataTestGenerateProvider(): \Generator
@@ -121,6 +138,14 @@ class MakerUseCaseTest extends MakerTestCase
                 ->addContent('Presenter', 'DoActionPresenterInterface.php', 'interface DoActionPresenterInterface')
                 ->addContent('Presenter', 'DoActionPresenterInterface.php', 'use App\Domain\Blog\Response\DoActionResponse')
                 ->addContent('Presenter', 'DoActionPresenterInterface.php', 'public function present(DoActionResponse $response): mixed;'),
+        ];
+    }
+
+    public static function dataTestFailedProvider(): \Generator
+    {
+        yield 'test_with_file_already_exist_throwing_Exception' => [
+            static::createTestFailedGenerate('Action', 'DoAction')
+                ->setException(FileAlreadyExistException::class, 'Domain/Action/Request/DoActionRequest.php" is already exist.'),
         ];
     }
 }

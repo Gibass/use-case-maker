@@ -2,6 +2,7 @@
 
 namespace Gibass\UseCaseMakerBundle\Maker;
 
+use Gibass\UseCaseMakerBundle\Exception\FileAlreadyExistException;
 use Gibass\UseCaseMakerBundle\Structure\StructureConfig;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
@@ -57,6 +58,9 @@ class MakerUseCase extends AbstractMaker
         }
     }
 
+    /**
+     * @throws FileAlreadyExistException
+     */
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $domainPath = $this->config->getDomainDir() . '/' . Str::asCamelCase($input->getArgument('domain'));
@@ -84,8 +88,13 @@ class MakerUseCase extends AbstractMaker
                 $this->config->get($key, 'suffix')
             );
 
+            $filePath = sprintf('%s/%s.php', $path, $this->details[$key]->getShortName());
+            if (file_exists($filePath)) {
+                throw new FileAlreadyExistException($filePath);
+            }
+
             $generator->generateFile(
-                sprintf('%s/%s.php', $path, $this->details[$key]->getShortName()),
+                $filePath,
                 $this->config->getTemplate($key, $input->getOption('presenter')),
                 array_merge([
                     'namespace' => $namespace,

@@ -30,6 +30,11 @@ class MakerTestCase extends KernelTestCase
         return new MakerTestContent($domain);
     }
 
+    protected static function createTestFailedGenerate(string $domain, string $useCase): MakerTestFailed
+    {
+        return new MakerTestFailed($domain, $useCase);
+    }
+
     protected function assertFilesGenerated(string $domain, array $files): void
     {
         foreach ($files as $key => $file) {
